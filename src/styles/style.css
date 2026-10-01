@@ -1,0 +1,81 @@
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #0d0614 0%, #1c0c24 50%, #0d0614 100%);
+            color: #fce7f3;
+            min-height: 100vh;
+        }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(244, 63, 94, 0.2);
+        }
+        .message-card, .photo-card {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(244, 63, 94, 0.15);
+            transition: all 0.3s ease;
+        }
+        .message-card:hover, .photo-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(244, 63, 94, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(244, 63, 94, 0.2);
+        }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(244,63,94,0.6)); }
+            50% { transform: scale(1.03); filter: drop-shadow(0 0 25px rgba(244,63,94,0.9)); }
+        }
+        .birthday-active-glow {
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+    .player-wrap {
+    position: relative;
+    padding-top: 44px; /* espaço para o disco aparecer acima do card */
+}
+.player-wrap > .glass-card {
+    position: relative;
+    z-index: 1; /* card fica na frente do disco */
+}
+
+.vinyl-bg {
+    position: absolute;
+    top: 0;
+    right: 2rem;
+    z-index: 0;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background:
+        repeating-radial-gradient(circle, transparent 0 2px, rgba(255,255,255,.05) 3px),
+        conic-gradient(from 0deg, #0d0d0d, #3a2142 12%, #0d0d0d 25%, #3a2142 37%, #0d0d0d 50%, #3a2142 62%, #0d0d0d 75%, #3a2142 87%, #0d0d0d);
+    box-shadow: 0 0 22px rgba(244, 63, 94, 0.45), inset 0 0 0 2px #000;
+    animation: vinylSpin 3s linear infinite;
+}
+/* etiqueta rosa com um ponto para a rotação ficar visível */
+.vinyl-bg::before {
+    content: '';
+    position: absolute;
+    inset: 32%;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 50% 18%, #fff 0 2px, transparent 3px),
+        radial-gradient(circle at 35% 35%, #fb7185, #be123c);
+}
+/* furo central */
+.vinyl-bg::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 5px; height: 5px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: #0d0614;
+}
+
+@keyframes vinylSpin {
+    to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .vinyl-bg { animation: none; }
+}
