@@ -123,3 +123,22 @@
     z-index: 5;
     box-shadow: 0 18px 32px -10px rgba(244,63,94,.4);
 }
+
+/* ---------------- BOTÕES EDITAR / APAGAR ---------------- */
+.owner-actions { display: flex; gap: .4rem; align-items: center; }
+#photos-grid .owner-actions { position: absolute; top: 18px; right: 18px; z-index: 10; }
+#messages-grid .owner-btn,
+#photos-grid .owner-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .3rem;
+    border: 0; cursor: pointer; border-radius: 999px;
+    background: rgba(20, 8, 26, .72) !important;
+    color: #fff !important;
+    font: 600 11px 'Plus Jakarta Sans', sans-serif !important;
+    padding: .4rem .7rem; backdrop-filter: blur(6px);
+    box-shadow: 0 2px 6px rgba(0,0,0,.35); transition: background .2s;
+}
+#photos-grid .owner-btn { width: 32px; height: 32px; padding: 0; }
+#messages-grid .owner-btn *, #photos-grid .owner-btn * { color: #fff !important; font-family: inherit !important; }
+.owner-btn.edit:hover { background: #7c3aed !important; }
+.owner-btn.del:hover { background: #e11d48 !important; }
+#messages-grid .owner-btn:hover, #photos-grid .owner-btn:hover { transform: none; }

@@ -6,35 +6,45 @@
   if (!window.gsap) { console.warn('timeline.js: GSAP não encontrado'); return; }
 
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const TARGET = new Date(2026, 9, 3, 0, 0, 0).getTime();
-  // const TARGET = Date.now() - 1000;
+  // const TARGET = new Date(2026, 9, 3, 0, 0, 0).getTime();
+  const TARGET = Date.now() - 1000;
   const PREVIEW = /[?&#](teste|preview)/.test(location.search + location.hash);
-  const SHOW_PLACEHOLDER = true;   // mostra a moldura "foto aqui" quando o slide não tem foto
 
   /* ====== CONTEÚDO (edite à vontade) ======
-     photo: URL da foto de fundo (deixe '' enquanto não tiver)
+     photo: foto que aparece como polaroid (deixe '' para um slide só de texto)
+     pos: parte da foto que fica visível (object-position) | ar: proporção largura/altura da moldura
+     note: frase "escrita à mão" embaixo da polaroid
      bg: cor ou gradiente | ink: cor do texto | ac: cor de destaque
      decor: elementos animados de aniversário (balloons, confetti, hearts, stars, candles) */
   const SLIDES = [
     {
       year: '2026', caption: 'Hoje, 03 de outubro', title: 'Hoje o dia é todo seu',
-      text: 'Preparei uma viagem pelos momentos que trouxeram você até aqui. Toque na tela para começar.',
-      bg: '#1c0c24', ink: '#fff1f2', ac: '#fb7185', decor: ['candles', 'stars'], photo: 'src/pages/images/Nossaaventurasjuntos2025.jpeg'
+      text: 'Preparei uma viagem pelos nossos momentos juntos. Toque na tela para começar.',
+      bg: '#1c0c24', ink: '#fff1f2', ac: '#fb7185', decor: ['candles', 'stars'], photo: ''
     },
     {
-      year: '2005', caption: 'O começo', title: 'Você chegou e o mundo ficou melhor',
-      text: 'Numa manhã de outubro, às oito horas, nascia a menina que anos depois viraria o meu lugar favorito.',
-      bg: '#f43f5e', ink: '#fff1f2', ac: '#fde68a', decor: ['balloons'], photo: 'src/pages/images/Primeiro Natal juntos 2022.jpeg'
+      year: '2022', caption: 'Nossa primeira foto', title: 'Tudo começou com uma careta',
+      text: 'Um filtro engraçado, dois sorrisos escondidos e nenhuma ideia de que aquela foto era o começo da melhor história da minha vida.',
+      bg: '#f43f5e', ink: '#fff1f2', ac: '#fde68a', decor: ['balloons'],
+      photo: 'images/Primeirafotojuntos,data2022.jpeg', pos: '50% 62%', ar: 0.75, note: 'a careta mais linda'
     },
     {
-      year: '2011', caption: 'Os primeiros sonhos', title: 'Cadernos coloridos e um sorriso enorme',
-      text: 'Entre brincadeiras e descobertas, você já tinha o jeito de iluminar qualquer sala em que entrava.',
-      bg: '#6d28d9', ink: '#faf5ff', ac: '#f9a8d4', decor: ['confetti'], photo: 'src/pages/images/Nossa aventuras juntos 2025.jpeg'
+      year: '2022', caption: 'Nosso primeiro Natal', title: 'Combinando de vermelho',
+      text: 'Sorrisos largos e o primeiro Natal ao seu lado. Desde ali, ficou impossível imaginar qualquer outro sem você.',
+      bg: '#6d28d9', ink: '#faf5ff', ac: '#f9a8d4', decor: ['confetti'],
+      photo: 'images/PrimeiroNataljuntos2022.jpeg', pos: '50% 35%', ar: 0.9, note: 'primeiro Natal ♥'
     },
     {
-      year: '2018', caption: 'Crescendo', title: 'Planos grandes, amigos para sempre',
-      text: 'Foi a fase das madrugadas conversando, das primeiras escolhas e da certeza de que você ia longe.',
-      bg: '#fbbf24', ink: '#2a0a1a', ac: '#be123c', decor: ['stars'], photo: 'src/pages/images/Pedido de casamento 2026.jpeg'
+      year: '2025', caption: 'Nossas aventuras', title: 'O mundo fica melhor com você',
+      text: 'De rosto colado, com uma vista linda atrás de nós. Cada passeio ao seu lado vira uma lembrança que eu guardo com carinho.',
+      bg: '#fbbf24', ink: '#2a0a1a', ac: '#be123c', decor: ['stars'],
+      photo: 'images/Nossaaventurasjuntos2025.jpeg', pos: '50% 50%', ar: 1.25, note: 'sempre juntos por aí'
+    },
+    {
+      year: '2026', caption: 'O pedido', title: 'O sim mais bonito',
+      text: 'Mãos dadas, um anel brilhando e uma sobremesa que ficou na memória. O dia em que prometemos construir a vida juntos.',
+      bg: '#134e4a', ink: '#f0fdfa', ac: '#fda4af', decor: ['hearts'],
+      photo: 'images/Pedidodecasamento2026.jpeg', pos: '50% 52%', ar: 0.8, note: 'o nosso sim ♥'
     },
     {
       year: '21', caption: 'Vinte e um anos de você', title: 'Feliz aniversário, meu amor',
@@ -84,20 +94,40 @@
   .lp.l2{left:0;transform-origin:0 100%;transform:rotate(18deg)}
   .kn{position:absolute;left:-9px;top:-12px;width:18px;height:18px;border-radius:50%;background:#f59e0b}
   #tl-root{background:#0d0614;--ink:#fff}
-  .tl-slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:5.5rem 1.5rem 4.5rem;background:var(--bg);color:var(--ink);overflow:hidden}
-  @media(min-width:800px){.tl-slide{padding:6rem 8vw 5rem}}
-  .tl-photo{position:absolute;inset:-5%;background:center/cover no-repeat;mix-blend-mode:luminosity;opacity:.55}
-  .tl-ph{position:absolute;right:1.5rem;top:5.5rem;width:min(40vw,250px);aspect-ratio:3/4;border:2px dashed currentColor;opacity:.28;border-radius:6px;display:grid;place-items:center;text-align:center;font-size:.8rem;padding:1rem}
-  .tl-decor{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-  .tl-copy{position:relative;z-index:2;max-width:34rem}
-  .tl-cap{display:flex;align-items:center;gap:.6rem;font-size:.95rem;font-weight:500;margin-bottom:.5rem}
-  .tl-cap::before{content:'';width:2rem;height:2px;background:var(--ac)}
-  .tl-year{font:italic 700 clamp(6.5rem,36vw,16rem)/.82 'Playfair Display',serif;letter-spacing:-.04em;text-shadow:.03em .03em 0 var(--ac)}
+  .tl-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.1rem;padding:4.3rem 1.25rem 3.4rem;background:var(--bg);color:var(--ink);overflow:hidden;text-align:center}
+  .tl-slide.has-cds{padding-top:12rem}
+  .tl-decor{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+  .tl-fw{position:relative;z-index:2;flex:0 0 auto}
+  .tl-halo{position:absolute;inset:-14%;border-radius:50%;background:radial-gradient(circle,var(--ac),transparent 68%);opacity:.38;filter:blur(18px);z-index:-1}
+  .tl-frame{position:relative;margin:0;width:min(80vw,340px,calc(33vh*var(--arn)));background:#fdfaf3;padding:10px 10px 42px;border-radius:3px;box-shadow:0 18px 34px -10px rgba(0,0,0,.65),0 3px 6px rgba(0,0,0,.3)}
+  .tl-frame img{display:block;width:100%;object-fit:cover;border-radius:2px;filter:contrast(1.04) saturate(1.08);-webkit-user-drag:none;pointer-events:none}
+  .tl-tape{position:absolute;top:-12px;left:50%;width:74px;height:23px;margin-left:-37px;transform:rotate(-3deg);background:rgba(253,230,138,.72);box-shadow:0 1px 2px rgba(0,0,0,.25)}
+  .tl-frame figcaption{position:absolute;left:0;right:0;bottom:8px;text-align:center;font:700 1.4rem/1 'Caveat',cursive;color:#4a3238}
+  .tl-copy{position:relative;z-index:2;width:100%;max-width:32rem}
+  .tl-cap{display:flex;align-items:center;justify-content:center;gap:.6rem;font-size:.9rem;font-weight:600;letter-spacing:.04em;margin-bottom:.35rem}
+  .tl-year{font:italic 700 clamp(3rem,14vw,6.5rem)/.9 'Playfair Display',serif;letter-spacing:-.03em;text-shadow:.04em .04em 0 var(--ac)}
+  .solo .tl-year{font-size:clamp(6rem,32vw,13rem);line-height:.82}
   .tl-year .d{display:inline-block;padding:.05em .03em .14em}
   .tl-year i{display:inline-block;font-style:inherit}
-  .tl-title{font:700 clamp(1.9rem,7.2vw,3.3rem)/1.04 'Playfair Display',serif;margin:1.1rem 0 .9rem}
+  .tl-title{font:700 clamp(1.55rem,6.2vw,2.8rem)/1.08 'Playfair Display',serif;margin:.7rem 0 .6rem}
+  .solo .tl-title{font-size:clamp(1.9rem,7.2vw,3.3rem);margin:1.1rem 0 .9rem}
+  .tl-text{font-size:clamp(.9rem,3.5vw,1.1rem);line-height:1.55;max-width:28rem;margin:0 auto;opacity:.93}
+  @media(min-width:800px){
+    .tl-slide{flex-direction:row;gap:6vw;padding:5rem 7vw 4rem;text-align:left}
+    .tl-slide.rev{flex-direction:row-reverse}
+    .tl-slide.solo{flex-direction:column;text-align:center;gap:1rem}
+    .tl-slide.has-cds{padding-top:12rem}
+    .tl-frame{width:min(34vw,400px,calc(58vh*var(--arn)))}
+    .tl-copy{max-width:30rem}
+    .tl-cap{justify-content:flex-start}
+    .solo .tl-cap{justify-content:center}
+    .tl-text{margin:0}
+    .solo .tl-text{margin:0 auto}
+    .tl-year{font-size:clamp(4rem,8vw,8rem)}
+    .tl-title{font-size:clamp(2rem,3.8vw,3.4rem)}
+  }
+  .tl-cap::before{content:'';width:2rem;height:2px;background:var(--ac)}
   .tl-title .w{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .04em .14em;margin-bottom:-.14em}
-  .tl-text{font-size:clamp(.98rem,3.8vw,1.15rem);line-height:1.6;max-width:28rem;opacity:.93}
   .tl-hint{position:absolute;bottom:1.5rem;left:0;right:0;text-align:center;font-size:.8rem;opacity:.7;z-index:2}
   .tl-cta{margin-top:1.6rem;border:0;border-radius:999px;padding:.95rem 1.7rem;background:var(--ink);color:#be123c;font:600 .95rem 'Plus Jakarta Sans',sans-serif;cursor:pointer}
   .tl-bars{position:absolute;top:max(.9rem,env(safe-area-inset-top));left:1rem;right:1rem;display:flex;gap:4px;z-index:5}
@@ -109,7 +139,7 @@
   .tl-balloon::after{content:'';position:absolute;left:50%;top:100%;width:1px;height:70px;background:currentColor;opacity:.5}
   .tl-cf{position:absolute;top:0;border-radius:2px}
   .tl-sv{position:absolute;bottom:-60px;opacity:.6;line-height:0}
-  .tl-cds{position:absolute;right:1.5rem;top:5.5rem;display:flex;align-items:flex-end;gap:14px}
+  .tl-cds{position:absolute;left:50%;top:4.2rem;transform:translateX(-50%);display:flex;align-items:flex-end;gap:14px}
   .tl-cd{display:flex;flex-direction:column;align-items:center}
   .tl-c{width:12px;border-radius:3px 3px 0 0;background:repeating-linear-gradient(135deg,#fff 0 6px,var(--ac) 6px 12px)}
   .tl-fl{width:14px;height:22px;margin-bottom:3px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(#fff,#fde68a 40%,#f59e0b);box-shadow:0 0 18px 6px rgba(253,224,71,.45)}
@@ -194,14 +224,24 @@
   let root = null, idx = -1, curCtx = null, startedAt = 0;
 
   function buildSlide(i) {
-    const s = SLIDES[i], el = document.createElement('section');
-    el.className = 'tl-slide';
+    const s = SLIDES[i], el = document.createElement('section'), has = !!s.photo;
+    el.className = 'tl-slide' + (has ? (i % 2 ? ' rev' : '') : ' solo') + (s.decor.includes('candles') ? ' has-cds' : '');
     el.style.cssText = `--bg:${s.bg};--ink:${s.ink};--ac:${s.ac};background:${s.bg}`;
     const digits = [...s.year].map((c) => `<span class="d"${i % 5 === 0 ? ' style="overflow:hidden"' : ''}><i>${c === ' ' ? '&nbsp;' : c}</i></span>`).join('');
     const words = s.title.split(' ').map((w) => `<span class="w"><span>${w}</span></span>`).join(' ');
+    const ar = s.ar || 0.75;
+    const frame = has ? `
+      <div class="tl-fw">
+        <div class="tl-halo"></div>
+        <figure class="tl-frame" style="--arn:${ar}">
+          <span class="tl-tape"></span>
+          <img src="${encodeURI(s.photo)}" alt="${s.caption}" draggable="false" style="aspect-ratio:${ar};object-position:${s.pos || 'center'}">
+          <figcaption>${s.note || ''}</figcaption>
+        </figure>
+      </div>` : '';
     el.innerHTML = `
-      ${s.photo ? `<div class="tl-photo" style="background-image:url('${s.photo}')"></div>` : (SHOW_PLACEHOLDER ? '<div class="tl-ph">espaço para foto de fundo</div>' : '')}
       <div class="tl-decor"></div>
+      ${frame}
       <div class="tl-copy">
         <p class="tl-cap">${s.caption}</p>
         <div class="tl-year" aria-label="${s.year}">${digits}</div>
@@ -213,18 +253,38 @@
     return el;
   }
 
+  /* Entrada animada da polaroid (uma por foto) + inclinação final de cada uma */
+  const TILT = [-4, 3, -3, 4];
+  const FRAME_IN = [
+    () => ({ y: -H() * .7, rotation: -28, scale: .7, opacity: 0, ease: 'bounce.out', duration: 1.3 }),
+    () => ({ x: 170, rotation: 28, scale: .8, opacity: 0, ease: 'back.out(1.6)', duration: 1.1 }),
+    () => ({ scale: 0, rotation: -60, opacity: 0, ease: 'elastic.out(1,.6)', duration: 1.4 }),
+    () => ({ rotationY: 90, transformPerspective: 800, y: 60, opacity: 0, ease: 'power3.out', duration: 1.1 })
+  ];
+
   function enter(el, s, i, delay) {
     return gsap.context(() => {
       const tl = gsap.timeline({ delay, defaults: { ease: 'power4.out' } });
       if (reduce) tl.timeScale(20);
-      tl.from('.tl-cap', { x: -24, opacity: 0, duration: .6 }, .1)
-        .from('.tl-year i', Object.assign({ duration: 1 }, YEAR_IN[i % YEAR_IN.length]), .2)
-        .from('.tl-title .w > span', { yPercent: 120, duration: .9, stagger: .07 }, .7)
-        .from('.tl-text', { opacity: 0, y: 16, filter: 'blur(8px)', duration: .9 }, 1.1)
-        .from('.tl-cta', { opacity: 0, scale: .8, duration: .7, ease: 'back.out(2)' }, 1.5)
-        .from('.tl-hint', { opacity: 0, duration: .6 }, 1.8)
-        .from('.tl-ph', { opacity: 0, scale: .9, rotation: 4, duration: .8 }, .4);
-      if (el.querySelector('.tl-photo')) gsap.fromTo('.tl-photo', { scale: 1.3 }, { scale: 1.05, duration: 7, ease: 'power1.out' });
+      const frame = el.querySelector('.tl-frame');
+      if (frame) {
+        const k = (i - 1) % FRAME_IN.length, r = TILT[k % TILT.length];
+        const { ease, duration, ...from } = FRAME_IN[k]();
+        tl.fromTo(frame, from, { x: 0, y: 0, scale: 1, opacity: 1, rotation: r, rotationY: 0, ease, duration }, 0)
+          .from('.tl-halo', { opacity: 0, scale: .6, duration: 1.2 }, .2)
+          .from('.tl-tape', { scaleX: 0, duration: .5, ease: 'back.out(2)' }, .9)
+          .from('.tl-frame figcaption', { opacity: 0, y: 8, duration: .6 }, 1.1);
+        if (!reduce) {
+          gsap.to('.tl-fw', { y: -9, duration: 2.6, delay: 1.4, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+          gsap.to('.tl-halo', { scale: 1.12, opacity: .55, duration: 2.2, delay: 1.6, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+        }
+      }
+      tl.from('.tl-cap', { x: -24, opacity: 0, duration: .6 }, .35)
+        .from('.tl-year i', Object.assign({ duration: 1 }, YEAR_IN[i % YEAR_IN.length]), .45)
+        .from('.tl-title .w > span', { yPercent: 120, duration: .9, stagger: .07 }, .9)
+        .from('.tl-text', { opacity: 0, y: 16, filter: 'blur(8px)', duration: .9 }, 1.3);
+      if (el.querySelector('.tl-cta')) tl.from('.tl-cta', { opacity: 0, scale: .8, duration: .7, ease: 'back.out(2)' }, 1.7);
+      if (el.querySelector('.tl-hint')) tl.from('.tl-hint', { opacity: 0, duration: .6 }, 2);
       if (!reduce) {
         const box = el.querySelector('.tl-decor');
         s.decor.forEach((k) => DECOR[k](box, s));
