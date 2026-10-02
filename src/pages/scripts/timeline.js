@@ -6,8 +6,8 @@
   if (!window.gsap) { console.warn('timeline.js: GSAP não encontrado'); return; }
 
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // const TARGET = new Date(2026, 9, 3, 0, 0, 0).getTime();
-  const TARGET = Date.now() - 1000;
+  const TARGET = new Date(2026, 9, 3, 0, 0, 0).getTime();
+  // const TARGET = Date.now() - 1000;
   const PREVIEW = /[?&#](teste|preview)/.test(location.search + location.hash);
   const SHOW_PLACEHOLDER = true;   // mostra a moldura "foto aqui" quando o slide não tem foto
 
@@ -19,32 +19,22 @@
     {
       year: '2026', caption: 'Hoje, 03 de outubro', title: 'Hoje o dia é todo seu',
       text: 'Preparei uma viagem pelos momentos que trouxeram você até aqui. Toque na tela para começar.',
-      bg: '#1c0c24', ink: '#fff1f2', ac: '#fb7185', decor: ['candles', 'stars'], photo: ''
+      bg: '#1c0c24', ink: '#fff1f2', ac: '#fb7185', decor: ['candles', 'stars'], photo: 'src/pages/images/Nossaaventurasjuntos2025.jpeg'
     },
     {
       year: '2005', caption: 'O começo', title: 'Você chegou e o mundo ficou melhor',
       text: 'Numa manhã de outubro, às oito horas, nascia a menina que anos depois viraria o meu lugar favorito.',
-      bg: '#f43f5e', ink: '#fff1f2', ac: '#fde68a', decor: ['balloons'], photo: ''
+      bg: '#f43f5e', ink: '#fff1f2', ac: '#fde68a', decor: ['balloons'], photo: 'src/pages/images/Primeiro Natal juntos 2022.jpeg'
     },
     {
       year: '2011', caption: 'Os primeiros sonhos', title: 'Cadernos coloridos e um sorriso enorme',
       text: 'Entre brincadeiras e descobertas, você já tinha o jeito de iluminar qualquer sala em que entrava.',
-      bg: '#6d28d9', ink: '#faf5ff', ac: '#f9a8d4', decor: ['confetti'], photo: ''
+      bg: '#6d28d9', ink: '#faf5ff', ac: '#f9a8d4', decor: ['confetti'], photo: 'src/pages/images/Nossa aventuras juntos 2025.jpeg'
     },
     {
       year: '2018', caption: 'Crescendo', title: 'Planos grandes, amigos para sempre',
       text: 'Foi a fase das madrugadas conversando, das primeiras escolhas e da certeza de que você ia longe.',
-      bg: '#fbbf24', ink: '#2a0a1a', ac: '#be123c', decor: ['stars'], photo: ''
-    },
-    {
-      year: '2023', caption: 'Nosso começo', title: 'Então a gente se encontrou',
-      text: 'Eu ainda não sabia, mas aquele primeiro oi ia mudar o rumo de tudo na minha vida.',
-      bg: '#ec4899', ink: '#ffffff', ac: '#fef3c7', decor: ['hearts'], photo: ''
-    },
-    {
-      year: '2025', caption: 'O pedido', title: 'Você disse sim',
-      text: 'Um anel, o coração acelerado e a melhor resposta que eu já ouvi.',
-      bg: '#0d0614', ink: '#fce7f3', ac: '#fbbf24', decor: ['stars', 'hearts'], photo: ''
+      bg: '#fbbf24', ink: '#2a0a1a', ac: '#be123c', decor: ['stars'], photo: 'src/pages/images/Pedido de casamento 2026.jpeg'
     },
     {
       year: '21', caption: 'Vinte e um anos de você', title: 'Feliz aniversário, meu amor',
