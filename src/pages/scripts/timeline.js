@@ -6,8 +6,8 @@
   if (!window.gsap) { console.warn('timeline.js: GSAP não encontrado'); return; }
 
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // const TARGET = new Date(2026, 9, 3, 0, 0, 0).getTime();
-  const TARGET = Date.now() - 1000;
+  const TARGET = new Date(2026, 9, 3, 0, 0, 0).getTime();
+  // const TARGET = Date.now() - 1000;
   const PREVIEW = /[?&#](teste|preview)/.test(location.search + location.hash);
 
   /* ====== CONTEÚDO (edite à vontade) ======
